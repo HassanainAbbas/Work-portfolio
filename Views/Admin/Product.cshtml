@@ -1,0 +1,156 @@
+﻿@model IEnumerable<Organify.Models.Product>
+
+@{
+    ViewData["Title"] = "Product Management";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Link Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+    /* Fonts */
+    body {
+        font-family: 'Roboto', sans-serif;
+    }
+
+    h1, h2, .btn, th, .badge {
+        font-family: 'Poppins', sans-serif;
+    }
+
+    h1 {
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    th {
+        font-weight: 600;
+    }
+
+    td, .table-hover tbody tr:hover td {
+        font-weight: 400;
+    }
+
+    .btn {
+        font-weight: 500;
+    }
+
+    .badge {
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    /* Styling for buttons */
+    .btn-warning {
+        background-color: #ffc107;
+        color: #000;
+        border: none;
+    }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+    }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+</style>
+
+<div class="container my-5">
+    <h1 class="text-center text-primary fw-bold">Product Inventory</h1>
+    <p class="text-center text-muted">Manage your product inventory with ease and style</p>
+</div>
+
+<!-- Add New Product Button -->
+<div class="container mb-4 text-end">
+    <a href="/Admin/AddProduct" class="btn btn-success btn-lg shadow">
+        <i class="bi bi-plus-circle"></i> Add New Product
+    </a>
+</div>
+
+<!-- Product Table Section -->
+<div class="container">
+    <div class="table-responsive shadow-sm rounded bg-white p-4">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-success">
+                <tr>
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    foreach (var product in Model)
+                    {
+                        <tr>
+                            <!-- Product Image -->
+                            <td class="text-center">
+                                <img src="@product.ImageUrl" alt="@product.Name" class="rounded" style="height: 60px; width: 60px; object-fit: cover;">
+                            </td>
+                            <!-- Product Name -->
+                            <td>
+                                <span class="fw-bold">@product.Name</span>
+                            </td>
+                            <!-- Description -->
+                            <td>
+                                <span class="text-muted">@product.Description?.Substring(0, Math.Min(product.Description.Length, 50))...</span>
+                            </td>
+                            <!-- Price -->
+                            <td>
+                                <span class="fw-bold text-success">$@string.Format("{0:F2}", product.Price)</span>
+                            </td>
+                            <!-- Category -->
+                            <td>
+                                <span class="badge bg-info text-dark">@product.Category</span>
+                            </td>
+                            <!-- Actions -->
+                            <td class="text-center">
+                                <a href="/Admin/EditProduct/@product.Id" class="btn btn-warning btn-sm me-2">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+                                <form method="post" action="/Admin/DeleteProduct" style="display: inline;">
+                                    <input type="hidden" name="id" value="@product.Id" />
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="bi bi-trash3"></i> Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">No products found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination Section -->
+    <div class="d-flex justify-content-center mt-4">
+        <ul class="pagination pagination-lg">
+            <li class="page-item">
+                <a class="page-link" href="#">1</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="#">2</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="#">3</a>
+            </li>
+        </ul>
+    </div>
+</div>

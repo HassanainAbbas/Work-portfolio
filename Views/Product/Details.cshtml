@@ -1,0 +1,87 @@
+﻿@model Organify.Models.Product
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="container my-5 product-details-page">
+    <div class="row align-items-center bg-light p-4 rounded shadow-lg">
+        <!-- Product Image Section -->
+        <div class="col-md-6 text-center">
+            <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded shadow" style="max-height: 400px;">
+        </div>
+
+        <!-- Product Information Section -->
+        <div class="col-md-6">
+            <h1 class="fw-bold text-success">@Model.Name</h1>
+            <p class="text-muted fs-5">@Model.Description</p>
+            <h3 class="text-dark fw-bold">$@Model.Price.ToString("F2")</h3>
+
+            <!-- Action Buttons -->
+            <div class="mt-4">
+                <!-- Add to Cart Button -->
+                <form method="post" action="/Cart/AddToCart">
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-cart-plus"></i> Add to Cart
+                    </button>
+                </form>
+
+                <!-- Back to Catalog Button -->
+                <a href="/Product/Index" class="btn btn-outline-success ms-2">
+                    <i class="bi bi-arrow-left-circle"></i> Back to Catalog
+                </a>
+            </div>
+
+            <div class="mt-4">
+                <h5 class="text-secondary">Product Category: <span class="fw-bold">@Model.Category</span></h5>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    /* Scoped styles for the Details Page */
+    .product-details-page .btn {
+        font-size: 1rem;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+    }
+
+    .product-details-page .btn-success {
+        background-color: #009970;
+        border-color: #009970;
+    }
+
+        .product-details-page .btn-success:hover {
+            background-color: #007a5e;
+            border-color: #007a5e;
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+    .product-details-page .btn-outline-success {
+        color: #009970;
+        border-color: #009970;
+    }
+
+        .product-details-page .btn-outline-success:hover {
+            background-color: #009970;
+            color: #fff;
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+    /* Adjust button alignment */
+    .product-details-page .btn {
+        display: inline-block;
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    /* Ensure buttons inside a card remain consistent */
+    .product-card .btn {
+        position: relative;
+    }
+</style>

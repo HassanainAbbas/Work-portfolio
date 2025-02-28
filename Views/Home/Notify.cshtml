@@ -1,0 +1,68 @@
+﻿@model List<Organify.Models.HubsMdl>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignalR Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+</head>
+<body>
+    <h2>Notifications</h2>
+
+
+    <ul id="messagesList"></ul>
+
+    
+
+
+    <div class="container my-5">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Message</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var message in Model)
+                {
+                    <tr>
+                        <td>@message.Message</td>
+                        <td>@message.CreatedAt.ToString("dd-MM-yyyy HH:mm:ss")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+
+        const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build()
+
+
+        connection.start()
+
+        connection.on("ReceiveMessage", function (message) {
+
+            let li = document.createElement("li")
+
+            li.textContent = "ADMIN :" + message;
+            document.getElementById("messagesList").appendChild(li);
+
+
+            
+        });
+
+
+    </script>
+
+
+
+
+</body>
+</html>

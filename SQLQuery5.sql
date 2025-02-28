@@ -1,0 +1,1 @@
+﻿DELETE FROM Products WHERE Id IS NULL;

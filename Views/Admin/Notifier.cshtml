@@ -1,0 +1,59 @@
+﻿
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignalR Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+</head>
+<body>
+    <h2>Broadcasting</h2>
+    <form method="post" asp-action="Notifier" asp-controller="Admin">
+        <label for="Message" class="form-label">Message</label>
+    <input type="text" id="messageInput" placeholder="Enter message" />
+    <button 
+        type="submit"
+        onclick="sendMessage()">Send
+    </button>
+    
+    </form>
+     <ul id="messagesList"></ul>
+
+    <script>
+
+        const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build()
+
+
+        connection.start()
+
+        function sendMessage() {
+            const message = document.getElementById("messageInput").value;
+            connection.invoke("sendMessage", message);
+
+        }
+
+    </script>
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
