@@ -1,0 +1,2 @@
+﻿ALTER TABLE Products
+ADD IsFeatured BIT DEFAULT 0;

@@ -1,0 +1,33 @@
+﻿@model List<Organify.Models.ContactMessage>
+
+@{
+    ViewData["Title"] = "Contact Messages";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container my-5">
+    <h2>Contact Messages</h2>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Message</th>
+                <th>Date Submitted</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var message in Model)
+            {
+                <tr>
+                    <td>@message.Name</td>
+                    <td>@message.Email</td>
+                    <td>@message.Phone</td>
+                    <td>@message.Message</td>
+                    <td>@message.SubmittedAt.ToString("dd MMM yyyy")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

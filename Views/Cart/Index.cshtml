@@ -1,0 +1,188 @@
+﻿@model List<Organify.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .cart-hero {
+        background-image: url('/images/empty-cart.jpg');
+        background-size: cover;
+        background-position: center;
+        height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+    }
+
+    .cart-hero-content {
+        background: rgba(0, 0, 0, 0.6);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+        .cart-hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .cart-hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+        }
+
+        .cart-hero-content a.btn {
+            font-size: 1.2rem;
+            color: white;
+            background: linear-gradient(145deg, #4caf50, #2e7d32);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+            .cart-hero-content a.btn:hover {
+                background: linear-gradient(145deg, #2e7d32, #4caf50);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            }
+
+    .cart-container h2 {
+        margin-top: 20px;
+        font-size: 1.8rem;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .table {
+        margin-top: 30px;
+    }
+
+        .table thead th {
+            background-color: #4caf50;
+            color: white;
+            text-align: center;
+        }
+
+        .table tbody td {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+    .cart-summary {
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-size: 1rem;
+    }
+
+    .summary-total {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        background-color: #4caf50;
+        border-color: #4caf50;
+    }
+
+        .btn-primary:hover {
+            background-color: #2e7d32;
+            border-color: #2e7d32;
+        }
+</style>
+
+<!-- Hero Section -->
+<div class="cart-hero">
+    <div class="cart-hero-content">
+        <h1>Your Shopping Cart</h1>
+        <p>Explore our catalog to find the best organic products.</p>
+        <a href="/Product/Index" class="btn">Browse Products</a>
+    </div>
+</div>
+<div class="container mt-3">
+    @if (TempData["OrderSuccessMessage"] != null)
+    {
+        <div class="alert alert-success text-center" role="alert">
+            @TempData["OrderSuccessMessage"]
+        </div>
+    }
+</div>
+<!-- Cart Section -->
+<div class="container mt-5 cart-container">
+    @if (!Model.Any())
+    {
+        <div class="text-center">
+            <h2>Your cart is empty!</h2>
+            <p>Explore our catalog to add products to your cart.</p>
+            <a href="/Product/Index" class="btn btn-success mt-3">Browse Products</a>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Product.Name</td>
+                            <td>
+                                <form method="post" action="@Url.Action("UpdateCart", "Cart", new { productId = item.Product.Id })">
+                                    <input type="number" name="quantity" value="@item.Quantity" min="1" max="10" class="form-control" style="width: 70px; display: inline-block;" onchange="this.form.submit();" />
+                                </form>
+                            </td>
+                            <td>$@string.Format("{0:F2}", item.Product.Price)</td>
+                            <td>$@string.Format("{0:F2}", item.Product.Price * item.Quantity)</td>
+                            <td>
+                                <a href="@Url.Action("RemoveFromCart", "Cart", new { productId = item.Product.Id })" class="btn btn-danger btn-sm">Remove</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <a href="/Product/Index" class="btn btn-secondary">Continue Shopping</a>
+            </div>
+            <div class="col-md-6 text-end">
+                <div class="cart-summary">
+                    <p class="summary-row"><span>Subtotal:</span> $@string.Format("{0:F2}", Model.Sum(item => item.Product.Price * item.Quantity))</p>
+                    <p class="summary-row"><span>Tax:</span> $@string.Format("{0:F2}", Model.Sum(item => item.Product.Price * item.Quantity) * 0.1M)</p>
+                    <p class="summary-row summary-total"><span>Total:</span> $@string.Format("{0:F2}", Model.Sum(item => item.Product.Price * item.Quantity) * 1.1M)</p>
+                   
+                    <form method="post" asp-action="CheckOut">
+                        <label for="shippingAddress">Shipping Address:</label>
+                        <input type="text" id="shippingAddress" name="shippingAddress" class="form-control" required placeholder="Enter your shipping address" />
+                        <button type="submit" class="btn btn-primary mt-3">Place Order</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    }
+</div>

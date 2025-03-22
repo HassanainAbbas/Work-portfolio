@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container my-5">
+    <!-- Admin Quick Actions Section -->
+    <section class="quick-actions text-center py-5 bg-light rounded">
+        <h2 class="mb-3">Admin Quick Actions</h2>
+        <p class="mb-4">Perform common administrative tasks efficiently.</p>
+        <div class="row justify-content-center">
+            <!-- Quick Action Buttons -->
+            <div class="col-md-3 mb-3">
+                <a href="/Admin/Users" class="btn btn-success btn-lg w-100 shadow-sm">
+                    <i class="bi bi-people"></i> Manage Users
+                </a>
+            </div>
+            <div class="col-md-3 mb-3">
+                <a href="/Admin/Orders" class="btn btn-info btn-lg w-100 shadow-sm">
+                    <i class="bi bi-cart"></i> Manage Orders
+                </a>
+            </div>
+            <div class="col-md-3 mb-3">
+                <a href="/Admin/Product" class="btn btn-warning btn-lg w-100 shadow-sm">
+                    <i class="bi bi-box"></i> Manage Products
+                </a>
+            </div>
+            <div class="col-md-3 mb-3">
+                <a href="/Admin/AddProduct" class="btn btn-primary btn-lg w-100 shadow-sm">
+                    <i class="bi bi-plus-circle"></i> Add New Product
+                </a>
+            </div>
+        </div>
+    </section>
+</div>

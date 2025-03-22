@@ -1,0 +1,81 @@
+﻿@model IEnumerable<Organify.Models.Product>
+
+@{
+    ViewData["Title"] = "Product Catalog";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var categories = new List<string> { "Fruits", "Vegetables", "Dairy", "Other" };
+    var currentCategory = ViewBag.Category as string ?? "All";
+    var currentSortBy = ViewBag.SortBy as string ?? "";
+}
+
+<!-- Hero Section -->
+<div class="hero-section-product" style="background-image: url('/images/Organify.png');">
+    <div class="container text-center text-white">
+        <h1>Our Product Catalog</h1>
+        <p>Discover the finest selection of organic products tailored for you.</p>
+    </div>
+</div>
+
+<!-- Sorting and Filtering Section -->
+<div class="container my-4">
+    <div class="row">
+        <!-- Sorting Section -->
+        <div class="col-md-6">
+            <h5 class="text-uppercase text-secondary mb-3">Sort By:</h5>
+            <nav class="nav nav-pills">
+                <a href="?sortBy=&category=@currentCategory"
+                   class="nav-link text-dark @(currentSortBy == "" ? "active-link" : "")">
+                    Default
+                </a>
+                <a href="?sortBy=price-asc&category=@currentCategory"
+                   class="nav-link text-dark @(currentSortBy == "price-asc" ? "active-link" : "")">
+                    Price: Low to High
+                </a>
+                <a href="?sortBy=price-desc&category=@currentCategory"
+                   class="nav-link text-dark @(currentSortBy == "price-desc" ? "active-link" : "")">
+                    Price: High to Low
+                </a>
+            </nav>
+        </div>
+
+        <!-- Filtering Section -->
+        <div class="col-md-6">
+            <h5 class="text-uppercase text-secondary mb-3">Filter By Category:</h5>
+            <nav class="nav nav-pills">
+                <a href="?sortBy=@currentSortBy&category=All"
+                   class="nav-link text-dark @(currentCategory == "All" ? "active-link" : "")">
+                    All Categories
+                </a>
+                @foreach (var category in categories)
+                {
+                    <a href="?sortBy=@currentSortBy&category=@category"
+                       class="nav-link text-dark @(currentCategory == category ? "active-link" : "")">
+                        @category
+                    </a>
+                }
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Product Grid -->
+<div class="container">
+    <div class="row">
+        @foreach (var product in Model)
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card shadow">
+                    <a asp-controller="Product" asp-action="Details" asp-route-id="@product.Id" class="text-decoration-none">
+                        <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">@product.Name</h5>
+                            <p class="text-muted">@product.Description</p>
+                            <p class="fw-bold text-success">$@product.Price.ToString("F2")</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

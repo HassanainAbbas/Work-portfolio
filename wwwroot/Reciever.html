@@ -1,0 +1,39 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignalR Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+</head>
+<body>
+    <h2>Notifications</h2>
+
+    <ul id="messagesList"></ul>
+
+    <script>
+
+        const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build()
+
+
+        connection.start()
+
+        connection.on("ReceiveMessage", function (message) {
+
+            let li = document.createElement("li")
+
+            li.textContent = "ADMIN :" + message;
+            document.getElementById("messagesList").appendChild(li);
+
+
+        });
+
+
+    </script>
+
+
+
+
+</body>
+</html>
